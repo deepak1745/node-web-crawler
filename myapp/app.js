@@ -11,6 +11,7 @@ var numPagesVisited = 0;
 var pagesToVisit = [];
 var url = new URL(START_URL);
 var baseUrl = url.protocol + "//" + url.hostname;
+var count = 0;
 
 pagesToVisit.push(START_URL);
 crawl();
@@ -18,6 +19,7 @@ crawl();
 function crawl() {
   if(numPagesVisited >= MAX_PAGES_TO_VISIT) {
     console.log("Reached max limit of number of pages to visit.");
+    console.log("Total count", count);
     return;
   }
   var nextPage = pagesToVisit.pop();
@@ -70,6 +72,7 @@ function collectInternalLinks($) {
     relativeLinks.each(function() {
       console.log($(this).attr('href'));
         pagesToVisit.push($(this).attr('href'));
+        count = count + 1;
     });
 }
 
@@ -78,12 +81,15 @@ function collectStaticLinks($) {
     console.log("Found " + imageLinks.length + " image links tags on page:");
     imageLinks.each(function() {
         console.log($(this).attr('src'));
+        count = count + 1;
+
     });
     console.log("\n");
     var cssLinks = $("link");
     console.log("Found " + cssLinks.length + " css links tags on page:");
     cssLinks.each(function() {
         console.log($(this).attr('href'));
+        count = count + 1;
     });
     console.log("\n");
     var scriptLinks = $("script");
@@ -91,6 +97,7 @@ function collectStaticLinks($) {
     scriptLinks.each(function() {
         if($(this).attr('src')){
           console.log($(this).attr('src'));
+          count = count + 1;
         }
     });
 }
@@ -101,6 +108,7 @@ function collectExternalLinks($) {
         var link = $(this).attr('href');
         if(!link.includes("https://wiprodigital.com")){ // external links
           console.log(link);
+          count = count + 1;
         }
     });
 }
